@@ -22,6 +22,10 @@ import repoze.who._auth_tkt as auth_tkt
 from repoze.who._compat import STRING_TYPES
 from repoze.who._compat import u
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 _UTCNOW = None  # unit tests can replace
 def _utcnow():  #pragma NO COVERAGE
     if _UTCNOW is not None:
@@ -110,6 +114,7 @@ class AuthTktCookiePlugin(object):
     
     # IIdentifier
     def remember(self, environ, identity):
+        logger.debug('REMEMBER START')
         if self.include_ip:
             remote_addr = environ['REMOTE_ADDR']
         else:
