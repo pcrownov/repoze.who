@@ -253,7 +253,7 @@ def make_plugin(secret=None,
         reissue_time = int(reissue_time)
     if userid_checker is not None:
         userid_checker = resolveDotted(userid_checker)
-    raise ValueError("pcrownov-THIS IS A REAL THING")
+    raise ValueError("pcrownov-THIS IS A REAL THING: %s" % __name__)
     plugin = AuthTktCookiePlugin(secret,
                                  cookie_name,
                                  _bool(secure),
