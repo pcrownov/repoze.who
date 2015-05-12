@@ -71,7 +71,10 @@ class AuthTktCookiePlugin(object):
     def identify(self, environ):
         logger.debug('repoze.who.plugins.auth_tkt IDENTIFY: START')
         cookies = get_cookies(environ)
+        logger.debug('Cookies: %s ' % cookies)
+        logger.debug('Cookie Name: %s ' % self.cookie_name)
         cookie = cookies.get(self.cookie_name)
+        logger.debug('Cookie: %s ' % cookie)
 
         if cookie is None or not cookie.value:
             return None
