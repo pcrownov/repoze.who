@@ -69,6 +69,7 @@ class AuthTktCookiePlugin(object):
 
     # IIdentifier
     def identify(self, environ):
+        logger.debug('repoze.who.plugins.auth_tkt IDENTIFY: START')
         cookies = get_cookies(environ)
         cookie = cookies.get(self.cookie_name)
 
@@ -109,12 +110,13 @@ class AuthTktCookiePlugin(object):
 
     # IIdentifier
     def forget(self, environ, identity):
+        logger.debug('repoze.who.plugins.auth_tkt FORGET START')
         # return a set of expires Set-Cookie headers
         return self._get_cookies(environ, 'INVALID', 0)
     
     # IIdentifier
     def remember(self, environ, identity):
-        logger.debug('REMEMBER START')
+        logger.debug('repoze.who.plugins.auth_tkt REMEMBER START')
         if self.include_ip:
             remote_addr = environ['REMOTE_ADDR']
         else:
@@ -169,6 +171,7 @@ class AuthTktCookiePlugin(object):
 
     # IAuthenticator
     def authenticate(self, environ, identity):
+        logger.debug('repoze.who.plugins.auth_tkt AUTHENTICATE: START')
         userid = identity.get('repoze.who.plugins.auth_tkt.userid')
         if userid is None:
             return None
@@ -178,6 +181,7 @@ class AuthTktCookiePlugin(object):
         return userid
 
     def _get_cookies(self, environ, value, max_age=None):
+        logger.debug('repoze.who.plugins.auth_tkt _GET_COOKIES: START')
         if max_age is not None:
             max_age = int(max_age)
             later = _utcnow() + datetime.timedelta(seconds=max_age)
