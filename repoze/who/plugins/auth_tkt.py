@@ -176,6 +176,7 @@ class AuthTktCookiePlugin(object):
     def authenticate(self, environ, identity):
         logger.debug('repoze.who.plugins.auth_tkt AUTHENTICATE: START')
         userid = identity.get('repoze.who.plugins.auth_tkt.userid')
+        logger.debug('authenticate : UserID : %s' % userid)
         if userid is None:
             return None
         if self.userid_checker and not self.userid_checker(userid):
