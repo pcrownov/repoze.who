@@ -8,6 +8,8 @@ from repoze.who._compat import StringIO
 _STARTED = '-- repoze.who request started (%s) --'
 _ENDED = '-- repoze.who request ended (%s) --'
 
+log = logging.getLogger(__name__)
+
 class PluggableAuthenticationMiddleware(object):
     def __init__(self,
                  app,
@@ -114,6 +116,7 @@ class PluggableAuthenticationMiddleware(object):
                 raise RuntimeError('no challengers found')
         else:
             logger and logger.info('no challenge required')
+            log.debug('PCROWNOV - REMEMBER')
             remember_headers = api.remember(identity)
             wrapper.finish_response(remember_headers)
 

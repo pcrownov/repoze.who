@@ -7,6 +7,9 @@ from repoze.who.interfaces import IAuthenticator
 from repoze.who.interfaces import IChallenger
 from repoze.who.interfaces import IMetadataProvider
 
+import logging
+
+log = logging.getLogger(__name__)
 
 def get_api(environ):
     return environ.get('repoze.who.api')
@@ -203,11 +206,13 @@ class API(object):
     def remember(self, identity=None):
         """ See IAPI.
         """
+        log.debug('PCROWNOV - REMEMBER')
         headers = ()
         if identity is None:
             identity = self.environ.get('repoze.who.identity', {})
         identifier = identity.get('identifier')
         if identifier:
+            log.debug('PCROWNOV - ID.REMEMBER')
             got_headers = identifier.remember(self.environ, identity)
             if got_headers:
                 headers = got_headers
@@ -257,7 +262,9 @@ class API(object):
         # Second pass to allow identifiers which passed on auth to participate
         # in remember / forget.
         for name, identifier in identifiers:
+            log.debug('PCROWNOV - IDENTITY FOR REMEMBER: %s' % identity)
             if identity is not None:
+                log.debug('PCROWNOV - ID.REMEMBER')
                 i_headers = identifier.remember(self.environ, identity)
             else:
                 i_headers = identifier.forget(self.environ, None)
