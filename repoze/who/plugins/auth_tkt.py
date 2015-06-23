@@ -69,12 +69,12 @@ class AuthTktCookiePlugin(object):
 
     # IIdentifier
     def identify(self, environ):
-        logger.debug('repoze.who.plugins.auth_tkt IDENTIFY: START')
+        logger.debug('identify: START')
         cookies = get_cookies(environ)
-        logger.debug('Cookies: %s ' % cookies)
-        logger.debug('Cookie Name: %s ' % self.cookie_name)
+        logger.debug('identify -- Cookies: %s ' % cookies)
+        logger.debug('identify -- Cookie Name: %s ' % self.cookie_name)
         cookie = cookies.get(self.cookie_name)
-        logger.debug('Cookie: %s ' % cookie)
+        logger.debug('identify -- Cookie: %s ' % cookie)
 
         if cookie is None or not cookie.value:
             return None
@@ -113,23 +113,28 @@ class AuthTktCookiePlugin(object):
 
     # IIdentifier
     def forget(self, environ, identity):
-        logger.debug('repoze.who.plugins.auth_tkt FORGET START')
+        logger.debug('forget: Start')
         # return a set of expires Set-Cookie headers
         return self._get_cookies(environ, 'INVALID', 0)
     
     # IIdentifier
     def remember(self, environ, identity):
-        logger.debug('repoze.who.plugins.auth_tkt REMEMBER START')
+        logger.debug('remember: START')
         if self.include_ip:
             remote_addr = environ['REMOTE_ADDR']
         else:
             remote_addr = '0.0.0.0'
 
         cookies = get_cookies(environ)
+        logger.debug('remember -- cookies: %s' % (cookies))
         old_cookie = cookies.get(self.cookie_name)
+        logger.debug('remember -- old_cookie: %s' % (old_cookie))
         existing = cookies.get(self.cookie_name)
+        logger.debug('remember -- existing cookies: %s' % (existing))
         old_cookie_value = getattr(existing, 'value', None)
+        logger.debug('remember -- old_cookie_value: %s' % (old_cookie_value))
         max_age = identity.get('max_age', None)
+        logger.debug('remember -- max_age: %s' % (max_age))
 
         timestamp, userid, tokens, userdata = None, '', (), ''
 
@@ -142,11 +147,15 @@ class AuthTktCookiePlugin(object):
         tokens = tuple(tokens)
 
         who_userid = identity['repoze.who.userid']
+        logger.debug('remember -- who_userid: %s' % (who_userid))
         who_tokens = tuple(identity.get('tokens', ()))
+        logger.debug('remember -- who_tokens: %s' % (who_tokens))
         who_userdata_dict = identity.get('userdata', {})
+        logger.debug('remember -- who_userdata_dict: %s' % (who_userdata_dict))
 
         encoding_data = self.userid_type_encoders.get(type(who_userid))
         if encoding_data:
+            logger.debug('remember -- Encoding Data')
             encoding, encoder = encoding_data
             who_userid = encoder(who_userid)
             who_userdata_dict[self.userid_typename] = encoding
@@ -155,6 +164,9 @@ class AuthTktCookiePlugin(object):
 
         old_data = (userid, tokens, userdata)
         new_data = (who_userid, who_tokens, who_userdata)
+
+        logger.debug('remember -- old_data: %s' % (old_data))
+        logger.debug('remember -- new_data : %s' % (new_data ))
 
         if old_data != new_data or (self.reissue_time and
                 ( (timestamp + self.reissue_time) < time.time() )):
@@ -167,16 +179,18 @@ class AuthTktCookiePlugin(object):
                 cookie_name=self.cookie_name,
                 secure=self.secure)
             new_cookie_value = ticket.cookie_value()
-            
+
+            logger.debug('remember -- old_cookie_value : %s' % (old_cookie_value ))
+            logger.debug('remember -- new_cookie_value : %s' % (new_cookie_value ))
             if old_cookie_value != new_cookie_value:
                 # return a set of Set-Cookie headers
                 return self._get_cookies(environ, new_cookie_value, max_age)
 
     # IAuthenticator
     def authenticate(self, environ, identity):
-        logger.debug('repoze.who.plugins.auth_tkt AUTHENTICATE: START')
+        logger.debug('authenticate: Start')
         userid = identity.get('repoze.who.plugins.auth_tkt.userid')
-        logger.debug('authenticate : UserID : %s' % userid)
+        logger.debug('authenticate -- UserID : %s' % userid)
         if userid is None:
             return None
         if self.userid_checker and not self.userid_checker(userid):
@@ -185,7 +199,7 @@ class AuthTktCookiePlugin(object):
         return userid
 
     def _get_cookies(self, environ, value, max_age=None):
-        logger.debug('repoze.who.plugins.auth_tkt _GET_COOKIES: START')
+        logger.debug('_get_cookies: Start')
         if max_age is not None:
             max_age = int(max_age)
             later = _utcnow() + datetime.timedelta(seconds=max_age)
