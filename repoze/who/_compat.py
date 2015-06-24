@@ -43,12 +43,12 @@ else: #pragma NO COVER Python < 3.0
     from ConfigParser import ParsingError
 
 try:
-    from Cookie import SimpleCookie
+    from repoze.who.Cookie import SimpleCookie
 except ImportError: #pragma NO COVER Python >= 3.0
     from http.cookies import SimpleCookie
     from http.cookies import CookieError
 else: #pragma NO COVER Python < 3.0
-    from Cookie import CookieError
+    from repoze.who.Cookie import CookieError
 
 try:
     from itertools import izip_longest
