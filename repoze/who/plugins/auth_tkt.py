@@ -70,11 +70,12 @@ class AuthTktCookiePlugin(object):
     # IIdentifier
     def identify(self, environ):
         logger.debug('identify: START')
+        logger.debug('identify -- Environ: {0}'.format(environ))
         cookies = get_cookies(environ)
-        logger.debug('identify -- Cookies: %s ' % cookies)
-        logger.debug('identify -- Cookie Name: %s ' % self.cookie_name)
+        logger.debug('identify -- Cookies: {0} '.format(cookies))
+        logger.debug('identify -- Cookie Name: {0} '.format(self.cookie_name))
         cookie = cookies.get(self.cookie_name)
-        logger.debug('identify -- Cookie: %s ' % cookie)
+        logger.debug('identify -- Cookie: {0} '.format(cookie))
 
         if cookie is None or not cookie.value:
             return None

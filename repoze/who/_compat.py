@@ -93,16 +93,23 @@ def USER_AGENT(environ):
 def AUTHORIZATION(environ):
     return environ.get('HTTP_AUTHORIZATION', '')
 
+import logging
+logger = logging.getLogger(__name__)
 def get_cookies(environ):
+    logger.debug('get_cookies: Start')
     header = environ.get('HTTP_COOKIE', '')
+    logger.debug('get_cookies -- header: {0}'.format(header))
     if 'paste.cookies' in environ:
         cookies, check_header = environ['paste.cookies']
+        logger.debug('get_cookies -- paste.cookies exists in environ, retuning: {0}'.format(cookies))
         if check_header == header:
             return cookies
     cookies = SimpleCookie()
     try:
+        logger.debug('get_cookies -- trying to load header into cookies')
         cookies.load(header)
     except CookieError: #pragma NO COVER (can't see how to provoke this)
+        logger.debug('get_cookies -- Error Loading Headers into Cookie!')
         pass
     environ['paste.cookies'] = (cookies, header)
     return cookies
