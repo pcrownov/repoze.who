@@ -44,8 +44,10 @@ else: #pragma NO COVER Python < 3.0
 
 try:
     from Cookie import SimpleCookie
+    from Cookie import SmartCookie
 except ImportError: #pragma NO COVER Python >= 3.0
     from http.cookies import SimpleCookie
+    from http.cookies import SmartCookie
     from http.cookies import CookieError
 else: #pragma NO COVER Python < 3.0
     from Cookie import CookieError
@@ -105,7 +107,7 @@ def get_cookies(environ):
             logger.debug('get_cookies -- paste.cookies exists in environ, retuning: {0}'.format(cookies))
             logger.debug('get_cookies -- check_header == header : {0}'.format(check_header))
             return cookies
-    cookies = SimpleCookie()
+    cookies = SmartCookie()
     try:
         logger.debug('get_cookies -- trying to load header into cookies')
         cookies.load(header)
