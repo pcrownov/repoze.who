@@ -101,8 +101,9 @@ def get_cookies(environ):
     logger.debug('get_cookies -- header: {0}'.format(header))
     if 'paste.cookies' in environ:
         cookies, check_header = environ['paste.cookies']
-        logger.debug('get_cookies -- paste.cookies exists in environ, retuning: {0}'.format(cookies))
         if check_header == header:
+            logger.debug('get_cookies -- paste.cookies exists in environ, retuning: {0}'.format(cookies))
+            logger.debug('get_cookies -- check_header == header : {0}'.format(check_header))
             return cookies
     cookies = SimpleCookie()
     try:
@@ -111,6 +112,7 @@ def get_cookies(environ):
     except CookieError: #pragma NO COVER (can't see how to provoke this)
         logger.debug('get_cookies -- Error Loading Headers into Cookie!')
         pass
+    logger.debug('get_cookies -- Setting paste.cookies to: {0},{1}'.format(cookies,header))
     environ['paste.cookies'] = (cookies, header)
     return cookies
 
