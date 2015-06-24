@@ -149,7 +149,7 @@ class AuthTktCookiePlugin(object):
         who_userid = identity['repoze.who.userid']
         logger.debug('remember -- who_userid: %s' % (who_userid))
         who_tokens = tuple(identity.get('tokens', ()))
-        logger.debug('remember -- who_token: %s' % (who_tokens))
+        logger.debug('remember -- who_token: %s,%s' % (who_tokens))
         who_userdata_dict = identity.get('userdata', {})
         logger.debug('remember -- who_userdata_dict: %s' % (who_userdata_dict))
 
