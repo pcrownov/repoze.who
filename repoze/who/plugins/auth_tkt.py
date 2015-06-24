@@ -147,11 +147,11 @@ class AuthTktCookiePlugin(object):
         tokens = tuple(tokens)
 
         who_userid = identity['repoze.who.userid']
-        logger.debug('remember -- who_userid: %s' % (who_userid))
+        logger.debug('remember -- who_userid: {0}'.format(who_userid))
         who_tokens = tuple(identity.get('tokens', ()))
-        logger.debug('remember -- who_token: %s,%s' % (who_tokens))
+        logger.debug('remember -- who_token: {0}'.format(who_tokens))
         who_userdata_dict = identity.get('userdata', {})
-        logger.debug('remember -- who_userdata_dict: %s' % (who_userdata_dict))
+        logger.debug('remember -- who_userdata_dict: {0}'.format(who_userdata_dict))
 
         encoding_data = self.userid_type_encoders.get(type(who_userid))
         if encoding_data:
@@ -165,8 +165,8 @@ class AuthTktCookiePlugin(object):
         old_data = (userid, tokens, userdata)
         new_data = (who_userid, who_tokens, who_userdata)
 
-        logger.debug('remember -- old_data: %s' % (old_data))
-        logger.debug('remember -- new_data : %s' % (new_data ))
+        logger.debug('remember -- old_data: {0}'.format(old_data))
+        logger.debug('remember -- new_data : {0}'.format(new_data ))
 
         if old_data != new_data or (self.reissue_time and
                 ( (timestamp + self.reissue_time) < time.time() )):
@@ -180,8 +180,8 @@ class AuthTktCookiePlugin(object):
                 secure=self.secure)
             new_cookie_value = ticket.cookie_value()
 
-            logger.debug('remember -- old_cookie_value : %s' % (old_cookie_value ))
-            logger.debug('remember -- new_cookie_value : %s' % (new_cookie_value ))
+            logger.debug('remember -- old_cookie_value : {0}'.format(old_cookie_value ))
+            logger.debug('remember -- new_cookie_value : {0}'.format(new_cookie_value ))
             if old_cookie_value != new_cookie_value:
                 # return a set of Set-Cookie headers
                 return self._get_cookies(environ, new_cookie_value, max_age)
