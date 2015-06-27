@@ -98,6 +98,7 @@ logger = logging.getLogger(__name__)
 def get_cookies(environ):
     logger.debug('get_cookies: Start')
     header = environ.get('HTTP_COOKIE', '')
+    logger.debug('get_cookies -- Header: {0}'.format(header))
     if 'paste.cookies' in environ:
         cookies, check_header = environ['paste.cookies']
         if check_header == header:
