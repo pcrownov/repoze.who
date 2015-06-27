@@ -103,9 +103,9 @@ def get_cookies(environ):
     logger.debug('get_cookies -- Header split: {0}'.format(header_set))
     new_header = ''
     for item in header_set:
-        key = item.split(';')[0]
+        key = item.split('=')[0]
         if key not in ['personcorprecent', 'searchcorprecent']:
-            new_header = new_header + item
+            new_header = new_header + item + ';'
     logger.debug('get_cookies -- New Header: {0}'.format(new_header))
     header = new_header
     if 'paste.cookies' in environ:
