@@ -99,6 +99,14 @@ def get_cookies(environ):
     logger.debug('get_cookies: Start')
     header = environ.get('HTTP_COOKIE', '')
     logger.debug('get_cookies -- Header: {0}'.format(header))
+    header_set = header.split(';')
+    new_header = ''
+    for item in header_set:
+        key = item.split(';')[0]
+        if key not in ['personcorprecent', 'searchcorprecent']
+            new_header = new_header + item
+
+    header = new_header
     if 'paste.cookies' in environ:
         cookies, check_header = environ['paste.cookies']
         if check_header == header:
