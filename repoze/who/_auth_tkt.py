@@ -171,7 +171,7 @@ def parse_ticket(secret, ticket, ip):
 
     expected = calculate_digest(ip, timestamp, secret,
                                 userid, tokens, user_data)
-    logger.debug('parse_ticket -- Expected :: Calculated -- {0} :: {1}'.format(expected, digest)
+    logger.debug('parse_ticket -- Expected :: Calculated -- {0} :: {1}'.format(expected, digest))
     if expected != digest:
         raise BadTicket('Digest signature is not correct',
                         expected=(expected, digest))
