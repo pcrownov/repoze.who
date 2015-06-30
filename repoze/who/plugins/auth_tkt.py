@@ -23,7 +23,6 @@ from repoze.who._compat import STRING_TYPES
 from repoze.who._compat import u
 
 import logging
-
 logger = logging.getLogger(__name__)
 
 _UTCNOW = None  # unit tests can replace

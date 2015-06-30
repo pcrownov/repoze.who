@@ -45,6 +45,8 @@ from repoze.who._compat import SimpleCookie
 from repoze.who._compat import url_quote
 from repoze.who._compat import url_unquote
 
+import logging
+logger = logging.getLogger(__name__)
 
 class AuthTicket(object):
 
@@ -141,13 +143,22 @@ def parse_ticket(secret, ticket, ip):
     an explanation.
     """
     ticket = ticket.strip('"')
-    digest = ticket[:32]
+    #md5
+    #digest = ticket[:32] 
+    #sha256
+    digest = ticket[:64]
     try:
-        timestamp = int(ticket[32:40], 16)
+        #md5
+        #timestamp = int(ticket[32:40], 16)
+        #sha256
+        timestamp = int(ticket[64:72], 16)
     except ValueError as e:
         raise BadTicket('Timestamp is not a hex integer: %s' % e)
     try:
-        userid, data = ticket[40:].split('!', 1)
+        #md5
+        #userid, data = ticket[40:].split('!', 1)
+        #sha256
+        userid, data = ticket[72:].split('!', 1)
     except ValueError:
         raise BadTicket('userid is not followed by !')
     userid = url_unquote(userid)
@@ -160,7 +171,7 @@ def parse_ticket(secret, ticket, ip):
 
     expected = calculate_digest(ip, timestamp, secret,
                                 userid, tokens, user_data)
-
+    logger.debug('parse_ticket -- Expected :: Calculated -- {0} :: {1}'.format(expected, digest)
     if expected != digest:
         raise BadTicket('Digest signature is not correct',
                         expected=(expected, digest))
