@@ -37,6 +37,7 @@ makes it possible to use the same authentication process with
 non-Python code run under Apache.
 """
 from hashlib import md5
+from hashlib import sha256
 import time as time_mod
 
 from repoze.who._compat import encodestring
@@ -174,10 +175,10 @@ def calculate_digest(ip, timestamp, secret, userid, tokens, user_data):
     userid = maybe_encode(userid)
     tokens = maybe_encode(tokens)
     user_data = maybe_encode(user_data)
-    digest0 = md5(
+    digest0 = sha256(
         encode_ip_timestamp(ip, timestamp) + secret + userid + b'\0'
         + tokens + b'\0' + user_data).hexdigest()
-    digest = md5(maybe_encode(digest0) + secret).hexdigest()
+    digest = sha256(maybe_encode(digest0) + secret).hexdigest()
     return digest
 
 
