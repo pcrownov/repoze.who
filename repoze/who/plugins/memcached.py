@@ -115,7 +115,7 @@ class MemcachedPlugin(object):
 		new_user_given = new_user_data.get('givenName', '')
 		new_user_sn = new_user_data.get('sn', '')
 		new_user_uid = new_user_data.get('uid', None)
-		new_user_ip = user_ip
+		new_user_ip = users_ip
 		
 		#build objects to compare
 		old_data = (old_user.get('altid'), old_user.get('given'), old_user.get('sn'), old_user.get('uid'), old_user.get('ip'))
