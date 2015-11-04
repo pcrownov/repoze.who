@@ -32,7 +32,7 @@ class MemcachedPlugin(object):
 		
 		try:
 			self.mc = memcache.Client([hosts], debug=debug)
-		except Exception as e
+		except Exception as e:
 			logger.error('Exception trying to establish Memcache connection')
 			raise ConnectionError('Could not connect to the memcache server. Please check the provided host and try again')
 
