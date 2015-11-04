@@ -132,7 +132,7 @@ class MemcachedPlugin(object):
 
 			#add the new data for the new cookie
 			new_user = {}
-			new_user['timestamp'] = lambda: int(round(time.time() * 1000))
+			new_user['timestamp'] = int(round(time.time() * 1000))
 			new_user['altid'] = new_user_altid
 			new_user['uid'] = new_user_uid
 			new_user['given'] = new_user_given
