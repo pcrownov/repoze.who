@@ -86,7 +86,9 @@ class MemcachedPlugin(object):
 	# IIdentifier
 	def forget(self, environ, identity):
 		#get the cookie and delete it's key & data from memcache
-		cookie = get_cookies(environ).get(self.cookie_name)
+		cookies = get_cookies(environ)
+		logger.debug('forget -- Cookies: {0}'.format(cookies))
+		cookie = cookies.get(self.cookie_name)
 		logger.debug('forget -- Forgetting Cookie: {0}'.format(cookie))
 		if cookie:
 			self.mc.delete(cookie)
