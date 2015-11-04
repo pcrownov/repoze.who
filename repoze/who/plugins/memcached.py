@@ -78,7 +78,8 @@ class MemcachedPlugin(object):
 	def forget(self, environ, identity):
 		#get the cookie and delete it's key & data from memcache
 		cookie = get_cookies(environ).get(self.cookie_name)
-		self.mc.delete(cookie)
+		if cookie:
+			self.mc.delete(cookie)
 		
 		# return a set of expires Set-Cookie headers
 		return self._get_cookies(environ, 'INVALID', 0)
@@ -94,8 +95,10 @@ class MemcachedPlugin(object):
 		#if no timestamp then set to 0 as earliest to can be reissued
 		timestamp = cookie.get('timestamp', 0)
 
+		old_user = {}
 		#get users data from memcache and compare it to new data received
-		old_user = self.mc.get(cookie)
+		if cookie:
+			old_user = self.mc.get(cookie)
 		
 		new_user_data = identity.get('userdata', {})
 		new_user_altid = identity.get('repoze.who.userid')
@@ -114,7 +117,9 @@ class MemcachedPlugin(object):
 			#get a new hash for the new cookie
 			new_cookie_value = self._get_hash()
 			#delete the old cookie's data from memcache
-			self.mc.delete(cookie)
+			if cookie:
+				self.mc.delete(cookie)
+
 			#add the new data for the new cookie
 			new_user = {}
 			new_user['timestamp'] = lambda: int(round(time.time() * 1000))
