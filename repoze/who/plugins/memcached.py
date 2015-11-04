@@ -7,6 +7,8 @@ import logging
 import memcache
 import time
 import datetime
+from wsgiref.handlers import _monthname     # Locale-independent, RFC-2616
+from wsgiref.handlers import _weekdayname   # Locale-independent, RFC-2616
 
 from zope.interface import implementer
 
