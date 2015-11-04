@@ -6,6 +6,7 @@ A Plugin that allows you to use memcached as an IAuthentication and IIdentifier 
 import logging
 import memcache
 import time
+import datetime
 
 from zope.interface import implementer
 
@@ -17,6 +18,12 @@ from repoze.who._compat import get_cookies
 from requests.exceptions import ConnectionError
 
 logger = logging.getLogger(__name__)
+
+_UTCNOW = None  # unit tests can replace
+def _utcnow():  #pragma NO COVERAGE
+    if _UTCNOW is not None:
+        return _UTCNOW
+    return datetime.datetime.utcnow()
 
 @implementer(IIdentifier, IAuthenticator)
 class MemcachedPlugin(object):
