@@ -18,7 +18,7 @@ from requests.exceptions import ConnectionError
 
 logger = logging.getLogger(__name__)
 
-@implements(IIdentifier, IAuthenticator)
+@implementer(IIdentifier, IAuthenticator)
 class MemcachedPlugin(object):
 	def __init__(	self,
 					hosts='127.0.0.1:11211',
