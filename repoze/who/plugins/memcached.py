@@ -102,7 +102,7 @@ class MemcachedPlugin(object):
 		cookie = cookies.get(self.cookie_name)
 		max_age = identity.get('max_age', None)
 		#if no timestamp then set to 0 as earliest to can be reissued
-		timestamp = 0 cookie.get('timestamp', 0)
+		timestamp = 0
 
 		old_user = {}
 		#get users data from memcache and compare it to new data received
