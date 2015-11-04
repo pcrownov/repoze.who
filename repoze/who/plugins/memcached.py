@@ -61,7 +61,7 @@ class MemcachedPlugin(object):
 			return None
 
 		#check if user exists
-		if not user
+		if not user:
 			return None
 
 		#check if user has timed out credentials
