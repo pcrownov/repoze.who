@@ -112,7 +112,7 @@ class MemcachedPlugin(object):
 		#get users data from memcache and compare it to new data received
 		if cookie and cookie.value:
 			timestamp = cookie.get('timestamp', 0)
-			old_user = self.mc.get(cookie.value)
+			old_user = self.mc.get(cookie.value, {})
 		
 		new_user_data = identity.get('userdata', {})
 		new_user_altid = identity.get('repoze.who.userid')
