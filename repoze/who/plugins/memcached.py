@@ -94,7 +94,7 @@ class MemcachedPlugin(object):
 			#not doing error handling here atm because I want it to fail if the type is bad
 			if not isinstance(cookie, str):
 				cookie = cookie.value
-			logger.debug('forget -- Forgetting Cookie: {0}'.format(cookie)
+			logger.debug('forget -- Forgetting Cookie: {0}'.format(cookie))
 			self.mc.delete(cookie)
 		
 		# return a set of expires Set-Cookie headers
