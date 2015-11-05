@@ -89,10 +89,8 @@ class MemcachedPlugin(object):
 		cookies = get_cookies(environ)
 		cookie = cookies.get(self.cookie_name)
 		
-		if cookie is None or not cookie.value:
-			raise ValueError('Cookie is null or wrong type: {0}'.format(type(cookie)))
-
-		self.mc.delete(cookie.value)
+		if cookie and cookie.value:
+			self.mc.delete(cookie.value)
 		
 		# return a set of expires Set-Cookie headers
 		return self._get_cookies(environ, 'INVALID', 0)
