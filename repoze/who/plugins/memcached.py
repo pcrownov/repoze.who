@@ -118,6 +118,7 @@ class MemcachedPlugin(object):
 			old_user = {}
 
 		new_user_data = identity.get('userdata', {})
+		logger.debug('Remembering userdata: {0}'.format(new_user_data))
 		new_user_altid = identity.get('repoze.who.userid')
 		new_user_given = new_user_data.get('givenName', '')
 		new_user_sn = new_user_data.get('sn', '')
