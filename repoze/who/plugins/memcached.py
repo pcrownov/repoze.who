@@ -73,6 +73,8 @@ class MemcachedPlugin(object):
 		if not user:
 			return None
 
+		logger.debug('Got User Object: {0}'.format(user))		
+		
 		#check if user has timed out credentials
 		if self.timeout and ( (user.timestamp + self.timeout) < time.time() ):
 			return None
