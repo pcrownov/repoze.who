@@ -90,7 +90,7 @@ class MemcachedPlugin(object):
 		cookie = cookies.get(self.cookie_name)
 		
 		if cookie is None or not cookie.value:
-			raise ValueError('Cookie is null or wrong type: {1}'.format(type(cookie)))
+			raise ValueError('Cookie is null or wrong type: {0}'.format(type(cookie)))
 
 		self.mc.delete(cookie.value)
 		
