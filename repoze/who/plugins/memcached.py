@@ -89,8 +89,12 @@ class MemcachedPlugin(object):
 		cookies = get_cookies(environ)
 		cookie = cookies.get(self.cookie_name)
 		
-		logger.debug('forget -- Forgetting Cookie of type{0}: {1}'.format(type(cookie.key), cookie.key))
+		logger.debug('forget -- Forgetting Cookie of type{0}: {1}'.format(type(cookie.value), cookie.value))
 		if cookie:
+			#try to get the value from a cookie.morsel object
+			#not doing error handling here atm because I want it to fail if the type is bad
+			if not isinstance(cookie, str):
+				cookie = cookie.value
 			self.mc.delete(cookie)
 		
 		# return a set of expires Set-Cookie headers
