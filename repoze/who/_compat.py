@@ -96,18 +96,13 @@ def AUTHORIZATION(environ):
 import logging
 logger = logging.getLogger(__name__)
 def get_cookies(environ):
-    logger.debug('get_cookies: Start')
     header = environ.get('HTTP_COOKIE', '')
-    logger.debug('get_cookies -- Header: {0}'.format(header))
     header_set = header.split(';')
-    logger.debug('get_cookies -- Header split: {0}'.format(header_set))
     new_header = ''
     for item in header_set:
         key = item.split('=')[0]
-        logger.debug('get_cookies -- Key: {0}'.format(key))
         if key.strip() not in ['personcorprecent', 'searchcorprecent']:
             new_header = new_header + item + ';'
-    logger.debug('get_cookies -- New Header: {0}'.format(new_header))
     header = new_header
     if 'paste.cookies' in environ:
         cookies, check_header = environ['paste.cookies']
@@ -118,7 +113,6 @@ def get_cookies(environ):
         cookies.load(header)
     except CookieError: #pragma NO COVER (can't see how to provoke this)
         pass
-    logger.debug('get_cookies -- Setting paste.cookies to: {0}'.format(cookies))
     environ['paste.cookies'] = (cookies, header)
     return cookies
 
