@@ -64,7 +64,7 @@ class MemcachedPlugin(object):
 
 		try:
 			#Use the cookie to get the users id from memcache
-			user = self.mc.get(cookie)
+			user = self.mc.get(cookie.value)
 		except Exception as e:
 			logger.error('Exception getting user from memcache: {0}'.format(e))
 			return None
@@ -89,13 +89,10 @@ class MemcachedPlugin(object):
 		cookies = get_cookies(environ)
 		cookie = cookies.get(self.cookie_name)
 		
-		if cookie:
-			#try to get the value from a cookie.morsel object
-			#not doing error handling here atm because I want it to fail if the type is bad
-			if not isinstance(cookie, str):
-				cookie = cookie.value
-			logger.debug('forget -- Forgetting Cookie: {0}'.format(cookie))
-			self.mc.delete(cookie)
+		if cookie is None or not cookie.value:
+			raise ValueError('Cookie is null or wrong type: {1}'.format(type(cookie)))
+
+		self.mc.delete(cookie.value)
 		
 		# return a set of expires Set-Cookie headers
 		return self._get_cookies(environ, 'INVALID', 0)
@@ -113,9 +110,9 @@ class MemcachedPlugin(object):
 
 		old_user = {}
 		#get users data from memcache and compare it to new data received
-		if cookie:
+		if cookie and cookie.value:
 			timestamp = cookie.get('timestamp', 0)
-			old_user = self.mc.get(cookie)
+			old_user = self.mc.get(cookie.value)
 		
 		new_user_data = identity.get('userdata', {})
 		new_user_altid = identity.get('repoze.who.userid')
@@ -134,8 +131,8 @@ class MemcachedPlugin(object):
 			#get a new hash for the new cookie
 			new_cookie_value = self._get_hash()
 			#delete the old cookie's data from memcache
-			if cookie:
-				self.mc.delete(cookie)
+			if cookie and cookie.value:
+				self.mc.delete(cookie.value)
 
 			#add the new data for the new cookie
 			new_user = {}
