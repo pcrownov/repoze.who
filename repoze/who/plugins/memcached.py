@@ -89,7 +89,7 @@ class MemcachedPlugin(object):
 		cookies = get_cookies(environ)
 		cookie = cookies.get(self.cookie_name)
 		
-		logger.debug('forget -- Forgetting Cookie of type{0}: {1}'.format(type(cookie), cookie))
+		logger.debug('forget -- Forgetting Cookie of type{0}: {1}'.format(type(cookie.key), cookie.key))
 		if cookie:
 			self.mc.delete(cookie)
 		
