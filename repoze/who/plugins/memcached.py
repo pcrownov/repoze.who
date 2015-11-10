@@ -154,8 +154,8 @@ class MemcachedPlugin(object):
 			new_user['uid'] = new_user_uid
 			new_user['given'] = new_user_given
 			new_user['sn'] = new_user_sn
-			new_user['ip'] = identity.get('ip')
-			logger.debug('Saving new user: {0}'.format(new_user))
+			new_user['ip'] = new_user_ip
+			logger.debug('Saving new user {0} ::: {1}'.format(new_cookie_value, new_user))
 			self.mc.set(new_cookie_value, new_user)
 
 			# return a set of Set-Cookie headers
