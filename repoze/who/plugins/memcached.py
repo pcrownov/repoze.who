@@ -140,10 +140,13 @@ class MemcachedPlugin(object):
 		#build objects to compare
 		old_data = (old_user_altid, old_user_given, old_user_sn, old_user_uid, old_user_ip)
 		new_data = (new_user_altid, new_user_given, new_user_sn, new_user_uid, new_user_ip)
-
-		#if new data or reissue time is reached, then create new timestamp and store data in cache
-		if old_data != new_data or (self.reissue_time and
-				( (timestamp + self.reissue_time) < time.time() )):
+		data_diff = old_data != new_data
+		reissue = self.reissue_time and ((timestamp + self.reissue_time) < time.time())
+		#TODO: Is it better to change userdata if it changes but keep key until timeout, then only 
+		#TODO-cont: reissue once timeout is reached?
+		#if new data or reissue time is reached, then create new timestamp and store data
+		if data_diff or reissue:
+			logger.debug('Data Diff: {0} ::: Reissue: {1}'.format(data_diff, reissue))
 			#get a new hash for the new cookie
 			new_cookie_value = self._get_hash()
 			#delete the old cookie's data from memcache
