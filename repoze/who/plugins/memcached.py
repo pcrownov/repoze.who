@@ -108,8 +108,8 @@ class MemcachedPlugin(object):
 		old_user = {}
 		#get users data from memcache and compare it to new data received
 		if cookie and cookie.value:
-			timestamp = cookie.get('timestamp', 0)
 			old_user = self.mc.get(cookie.value)
+			timestamp = old_user.get('timestamp', 0)
 			logger.debug('Cookie val: {0}'.format(cookie.value))
 		else:
 			logger.debug('No Old Cookie')
@@ -131,9 +131,15 @@ class MemcachedPlugin(object):
 		new_user_uid = new_user_data.get('uid', old_user.get('uid'))
 		new_user_ip = users_ip
 		
+		old_user_altid = old_user.get('altid')
+		old_user_given = old_user.get('given')
+		old_user_sn = old_user.get('sn')
+		old_user_uid = old_user.get('uid')
+		old_user_ip = old_user.get('ip')
+		
 		#build objects to compare
-		old_data = (old_user.get('altid'), old_user.get('given'), old_user.get('sn'), old_user.get('uid'), old_user.get('ip'))
-		new_data = (new_user_altid, 		new_user_given, 		new_user_sn, 		new_user_uid, 		new_user_ip)
+		old_data = (old_user_altid, old_user_given, old_user_sn, old_user_uid, old_user_ip)
+		new_data = (new_user_altid, new_user_given, new_user_sn, new_user_uid, new_user_ip)
 
 		#if new data or reissue time is reached, then create new timestamp and store data in cache
 		if old_data != new_data or (self.reissue_time and
@@ -196,8 +202,7 @@ class MemcachedPlugin(object):
 #		cur_domain = cur_domain.split(':')[0] # drop port
 #		wild_domain = '.' + cur_domain
 		cookies = [
-			('Set-Cookie', '%s="%s"; Path=/%s%s' % (
-			self.cookie_name, value, max_age, secure))
+				('Set-Cookie', '{0}="{1}"; Path=/{2}{3}'.format(self.cookie_name, value, max_age, secure))
 			]
 
 #		cookies = [
