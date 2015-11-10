@@ -99,9 +99,6 @@ class MemcachedPlugin(object):
 	
 	# IIdentifier
 	def remember(self, environ, identity):
-		#get the users IP address to be stored
-		users_ip = environ['REMOTE_ADDR']
-
 		cookies = get_cookies(environ)
 		cookie = cookies.get(self.cookie_name)
 		max_age = identity.get('max_age', None)
@@ -117,12 +114,16 @@ class MemcachedPlugin(object):
 		if not old_user:
 			old_user = {}
 
+		#get the users IP address to be stored
+		users_ip = environ['REMOTE_ADDR'] or old_user.get('ip')
+
+		#get the new users data, or if blank, use the new users
 		new_user_data = identity.get('userdata', {})
 		logger.debug('Remembering userdata: {0}'.format(new_user_data))
 		new_user_altid = identity.get('repoze.who.userid')
-		new_user_given = new_user_data.get('givenName', '')
-		new_user_sn = new_user_data.get('sn', '')
-		new_user_uid = new_user_data.get('uid', None)
+		new_user_given = new_user_data.get('givenName', old_user.get('given'))
+		new_user_sn = new_user_data.get('sn', old_user.get('sn'))
+		new_user_uid = new_user_data.get('uid', old_user.get('uid'))
 		new_user_ip = users_ip
 		
 		#build objects to compare
@@ -138,9 +139,12 @@ class MemcachedPlugin(object):
 			if cookie and cookie.value:
 				self.mc.delete(cookie.value)
 
+			logger.debug('Old Userdata: {0}'.format(old_data))
+			logger.debug('New Userdata: {0}'.format(new_data))
+
 			#add the new data for the new cookie
 			new_user = {}
-			new_user['timestamp'] = int(round(time.time() * 1000))
+			new_user['timestamp'] = time.time()
 			new_user['altid'] = new_user_altid
 			new_user['uid'] = new_user_uid
 			new_user['given'] = new_user_given
