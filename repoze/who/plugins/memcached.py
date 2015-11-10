@@ -111,7 +111,6 @@ class MemcachedPlugin(object):
 		#get users data from memcache and compare it to new data received
 		if cookie and cookie.value:
 			old_user = self.mc.get(cookie.value)
-			timestamp = old_user.get('timestamp', 0)
 			logger.debug('Cookie val: {0}'.format(cookie.value))
 		else:
 			logger.debug('No Old Cookie')
@@ -121,6 +120,8 @@ class MemcachedPlugin(object):
 		if not old_user:
 			old_user = {}
 
+		timestamp = old_user.get('timestamp', 0)
+		
 		#get the users IP address to be stored
 		users_ip = environ['REMOTE_ADDR'] or old_user.get('ip')
 
