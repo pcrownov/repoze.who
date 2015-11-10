@@ -180,7 +180,8 @@ class MemcachedPlugin(object):
 		identity['repoze.who.userid'] = userid
 		return userid
 
-	def _get_cookies(self, environ, value, max_age=self.timeout):
+	def _get_cookies(self, environ, value, max_age=None):
+		max_age = max_age or self.timeout
 		if max_age is not None:
 			max_age = int(max_age)
 			later = _utcnow() + datetime.timedelta(seconds=max_age)
