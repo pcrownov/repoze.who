@@ -204,18 +204,18 @@ class MemcachedPlugin(object):
 #		cur_domain = environ.get('HTTP_HOST', environ.get('SERVER_NAME'))
 #		cur_domain = cur_domain.split(':')[0] # drop port
 #		wild_domain = '.' + cur_domain
-		cookies = [
-				('Set-Cookie', '{0}="{1}"; Path=/{2}{3}'.format(self.cookie_name, value, max_age, secure))
-			]
-
 #		cookies = [
-#			('Set-Cookie', '%s="%s"; Path=/%s%s' % (
-#			self.cookie_name, value, max_age, secure)),
-#			('Set-Cookie', '%s="%s"; Path=/; Domain=%s%s%s' % (
-#			self.cookie_name, value, cur_domain, max_age, secure)),
-#			('Set-Cookie', '%s="%s"; Path=/; Domain=%s%s%s' % (
-#			self.cookie_name, value, wild_domain, max_age, secure))
+#				('Set-Cookie', '{0}="{1}"; Path=/{2}{3}'.format(self.cookie_name, value, max_age, secure))
 #			]
+
+		cookies = [
+			('Set-Cookie', '%s="%s"; Path=/%s%s' % (
+			self.cookie_name, value, max_age, secure)),
+			('Set-Cookie', '%s="%s"; Path=/; Domain=%s%s%s' % (
+			self.cookie_name, value, cur_domain, max_age, secure)),
+			('Set-Cookie', '%s="%s"; Path=/; Domain=%s%s%s' % (
+			self.cookie_name, value, wild_domain, max_age, secure))
+			]
 		return cookies
 
 	def _get_hash(self):
