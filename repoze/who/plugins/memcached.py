@@ -111,8 +111,8 @@ class MemcachedPlugin(object):
 			timestamp = cookie.get('timestamp', 0)
 			old_user = self.mc.get(cookie.value)
 
-		logger.debug('Cookie val: {0}'.format(cookie.value)
-		logger.debug('Got Old User: {0}'.format(old_user)
+		logger.debug('Cookie val: {0}'.format(cookie.value))
+		logger.debug('Got Old User: {0}'.format(old_user))
 
 		if not old_user:
 			old_user = {}
