@@ -214,11 +214,11 @@ class MemcachedPlugin(object):
 
 		cookies = [
 			('Set-Cookie', '%s="%s"; Path=/%s%s' % (
-			self.cookie_name, value, max_age, secure)),
-			('Set-Cookie', '%s="%s"; Path=/; Domain=%s%s%s' % (
-			self.cookie_name, value, cur_domain, max_age, secure)),
-			('Set-Cookie', '%s="%s"; Path=/; Domain=%s%s%s' % (
-			self.cookie_name, value, wild_domain, max_age, secure))
+			self.cookie_name, value, max_age, secure))
+			,('Set-Cookie', '%s="%s"; Path=/; Domain=%s%s%s' % (
+			self.cookie_name, value, cur_domain, max_age, secure))
+#			,('Set-Cookie', '%s="%s"; Path=/; Domain=%s%s%s' % (
+#			self.cookie_name, value, wild_domain, max_age, secure))
 			]
 		return cookies
 
