@@ -201,9 +201,9 @@ class MemcachedPlugin(object):
 		secure = '; secure; HttpOnly'
 
 # I am not sure we need to set these here.... removing them for now
-#		cur_domain = environ.get('HTTP_HOST', environ.get('SERVER_NAME'))
-#		cur_domain = cur_domain.split(':')[0] # drop port
-#		wild_domain = '.' + cur_domain
+		cur_domain = environ.get('HTTP_HOST', environ.get('SERVER_NAME'))
+		cur_domain = cur_domain.split(':')[0] # drop port
+		wild_domain = '.' + cur_domain
 #		cookies = [
 #				('Set-Cookie', '{0}="{1}"; Path=/{2}{3}'.format(self.cookie_name, value, max_age, secure))
 #			]
