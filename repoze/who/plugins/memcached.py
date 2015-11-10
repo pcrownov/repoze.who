@@ -87,13 +87,15 @@ class MemcachedPlugin(object):
 
 	# IIdentifier
 	def forget(self, environ, identity):
+		logger.debug('Forget - repoze.who')
 		#get the cookie and delete it's key & data from memcache
 		cookies = get_cookies(environ)
 		cookie = cookies.get(self.cookie_name)
-		
+
 		if cookie and cookie.value:
 			self.mc.delete(cookie.value)
-		
+			logger.debug('Forgetting cookie: {0}'.format(cookie.value))
+
 		# return a set of expires Set-Cookie headers
 		return self._get_cookies(environ, 'INVALID', 0)
 	
@@ -178,7 +180,7 @@ class MemcachedPlugin(object):
 		identity['repoze.who.userid'] = userid
 		return userid
 
-	def _get_cookies(self, environ, value, max_age=None):
+	def _get_cookies(self, environ, value, max_age=self.timeout):
 		if max_age is not None:
 			max_age = int(max_age)
 			later = _utcnow() + datetime.timedelta(seconds=max_age)
