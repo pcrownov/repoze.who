@@ -58,6 +58,8 @@ class MemcachedPlugin(object):
 		cookies = get_cookies(environ)
 		cookie = cookies.get(self.cookie_name)
 
+		logger.debug('environ: {0}'.format(environ))
+
 		#check if it is not null
 		if cookie is None or not cookie.value:
 			return None
