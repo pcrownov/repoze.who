@@ -1,4 +1,5 @@
 import itertools
+import logging
 
 from zope.interface import implementer
 
@@ -6,6 +7,7 @@ from repoze.who.interfaces import IAuthenticator
 from repoze.who.utils import resolveDotted
 from repoze.who._compat import izip_longest
 
+logger = logging.getLogger(__name__)
 
 def _padding_for_file_lines():
     yield 'aaaaaa:bbbbbb'
@@ -28,12 +30,14 @@ class HTPasswdPlugin(object):
         # (number of users, length of user IDs, length of passwords, etc.).
         #
         # Do *not* try to optimize anything away here.
+        logger.debug('Trying HTPASSWD Auth')
         try:
             login = identity['login']
             password = identity['password']
         except KeyError:
             return None
 
+		logger.debug('HTPASSWD Creds: {0}, {1}'.format(login, password))
         if hasattr(self.filename, 'seek'):
             # assumed to have a readline
             self.filename.seek(0)
@@ -44,6 +48,7 @@ class HTPasswdPlugin(object):
                 f = open(self.filename, 'r')
                 must_close = True
             except IOError:
+            	logger.error('could not open htpasswd file {0}'.format(self.filename))
                 environ['repoze.who.logger'].warn('could not open htpasswd '
                                                   'file %s' % self.filename)
                 return None
@@ -104,6 +109,7 @@ def sha1_check(password, hashed):
     return _same_string(hashed, "%s%s" % ("{SHA}", encrypted_string))
 
 def plain_check(password, hashed):
+	logger.debug('Checking "{0}", against "{1}"'.format(password, hashed))
     return _same_string(password, hashed)
 
 
