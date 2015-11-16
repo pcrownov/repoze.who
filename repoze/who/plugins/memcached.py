@@ -58,8 +58,6 @@ class MemcachedPlugin(object):
 		cookies = get_cookies(environ)
 		cookie = cookies.get(self.cookie_name)
 
-		logger.debug('environ: {0}'.format(environ))
-
 		#check if it is not null
 		if cookie is None or not cookie.value:
 			return None
@@ -143,8 +141,8 @@ class MemcachedPlugin(object):
 		old_user_ip = old_user.get('ip')
 		
 		#build objects to compare
-		old_data = (old_user_altid, old_user_given, old_user_sn, old_user_uid, old_user_ip)
-		new_data = (new_user_altid, new_user_given, new_user_sn, new_user_uid, new_user_ip)
+		old_data = (old_user_altid, old_user_given, old_user_sn, old_user_uid)
+		new_data = (new_user_altid, new_user_given, new_user_sn, new_user_uid)
 		data_diff = old_data != new_data
 		reissue = self.reissue_time and ((timestamp + self.reissue_time) < time.time())
 		#TODO: Is it better to change userdata if it changes but keep key until timeout, then only 
