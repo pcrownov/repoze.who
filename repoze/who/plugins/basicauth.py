@@ -1,4 +1,5 @@
 import binascii
+import logging
 
 from webob.exc import HTTPUnauthorized
 from zope.interface import implementer
@@ -9,6 +10,8 @@ from repoze.who._compat import AUTHORIZATION
 from repoze.who._compat import decodebytes
 from repoze.who._compat import must_decode
 
+logger = logging.getLogger(__name__)
+
 @implementer(IIdentifier, IChallenger)
 class BasicAuthPlugin(object):
 
@@ -17,7 +20,10 @@ class BasicAuthPlugin(object):
 
     # IIdentifier
     def identify(self, environ):
+    	#get auth from header
         authorization = AUTHORIZATION(environ)
+        logger.debug('BASIC AUTH: {0}'.format(authorization))
+
         if type(authorization) != type(b''):
             # this header *must* be base64-encoded ASCII
             authorization = authorization.encode('ascii')
@@ -25,6 +31,8 @@ class BasicAuthPlugin(object):
             authmeth, auth = authorization.split(b' ', 1)
         except ValueError: # not enough values to unpack
             return None
+        logger.debug('BASIC AUTH AUTHMETH: {0}'.format(authmeth.lower())
+        logger.debug('BASIC AUTH AUTH: {0}'.format(decodebytes(auth.strip())))
         if authmeth.lower() == b'basic':
             try:
                 auth = auth.strip()
@@ -37,6 +45,7 @@ class BasicAuthPlugin(object):
                 return None
             auth = {'login': must_decode(login),
                     'password': must_decode(password)}
+            logger.debug('BASIC AUTH CREDS: {0}'.format(auth))
             return auth
 
         return None
@@ -67,6 +76,7 @@ class BasicAuthPlugin(object):
                             id(self)) #pragma NO COVERAGE
 
 def make_plugin(realm='basic'):
+	logger.debug('BASIC AUTH MAKE PLUGIN')
     plugin = BasicAuthPlugin(realm)
     return plugin
 
