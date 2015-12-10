@@ -31,7 +31,7 @@ class BasicAuthPlugin(object):
             authmeth, auth = authorization.split(b' ', 1)
         except ValueError: # not enough values to unpack
             return None
-        logger.debug('BASIC AUTH AUTHMETH: {0}'.format(authmeth.lower())
+        logger.debug('BASIC AUTH AUTHMETH: {0}'.format(authmeth.lower()))
         logger.debug('BASIC AUTH AUTH: {0}'.format(decodebytes(auth.strip())))
         if authmeth.lower() == b'basic':
             try:
