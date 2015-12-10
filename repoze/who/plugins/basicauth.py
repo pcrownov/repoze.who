@@ -76,7 +76,7 @@ class BasicAuthPlugin(object):
                             id(self)) #pragma NO COVERAGE
 
 def make_plugin(realm='basic'):
-	logger.debug('BASIC AUTH MAKE PLUGIN')
+    logger.debug('BASIC AUTH MAKE PLUGIN')
     plugin = BasicAuthPlugin(realm)
     return plugin
 
