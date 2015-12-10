@@ -21,6 +21,7 @@ class BasicAuthPlugin(object):
     # IIdentifier
     def identify(self, environ):
     	#get auth from header
+    	logger.debug('BASIC AUTH ENV: {0}'.format(environ))
         authorization = AUTHORIZATION(environ)
         logger.debug('BASIC AUTH: {0}'.format(authorization))
 
